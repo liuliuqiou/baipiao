@@ -15,8 +15,8 @@ do
 done
 if [ $n == 5 ]
 then
-	echo µ±Ç°ÏµÍ³$(grep -i PRETTY_NAME /etc/os-release | cut -d \" -f2)Ã»ÓĞÊÊÅä
-	echo Ä¬ÈÏÊ¹ÓÃAPT°ü¹ÜÀíÆ÷
+	echo å½“å‰ç³»ç»Ÿ$(grep -i PRETTY_NAME /etc/os-release | cut -d \" -f2)æ²¡æœ‰é€‚é…
+	echo é»˜è®¤ä½¿ç”¨APTåŒ…ç®¡ç†å™¨
 	n=0
 fi
 if [ -z $(type -P unzip) ]
@@ -60,7 +60,7 @@ case "$(uname -m)" in
 	curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm -o cloudflared-linux
 	;;
 	* )
-	echo µ±Ç°¼Ü¹¹$(uname -m)Ã»ÓĞÊÊÅä
+	echo å½“å‰æ¶æ„$(uname -m)æ²¡æœ‰é€‚é…
 	exit
 	;;
 esac
@@ -147,7 +147,7 @@ while true
 do
 n=$[$n+1]
 clear
-echo µÈ´ıcloudflare argoÉú³ÉµØÖ· ÒÑµÈ´ı $n Ãë
+echo ç­‰å¾…cloudflare argoç”Ÿæˆåœ°å€ å·²ç­‰å¾… $n ç§’
 argo=$(cat argo.log | grep trycloudflare.com | awk 'NR==2{print}' | awk -F// '{print $2}' | awk '{print $1}')
 if [ $n == 15 ]
 then
@@ -160,7 +160,7 @@ then
 	fi
 	rm -rf argo.log
 	clear
-	echo argo»ñÈ¡³¬Ê±,ÖØÊÔÖĞ
+	echo argoè·å–è¶…æ—¶,é‡è¯•ä¸­
 	./cloudflared-linux tunnel --url http://localhost:$port --no-autoupdate --edge-ip-version $ips --protocol http2 >argo.log 2>&1 &
 	sleep 1
 elif [ -z "$argo" ]
@@ -174,37 +174,37 @@ done
 clear
 if [ $protocol == 1 ]
 then
-	echo -e vmessÁ´½ÓÒÑ¾­Éú³É, cdn.anycast.eu.org ¿ÉÌæ»»ÎªCFÓÅÑ¡IP'\n' > v2ray.txt
+	echo -e vmessé“¾æ¥å·²ç»ç”Ÿæˆ, cdn.anycast.eu.org å¯æ›¿æ¢ä¸ºCFä¼˜é€‰IP'\n' > v2ray.txt
 	if [ $(grep -i PRETTY_NAME /etc/os-release | cut -d \" -f2 | awk '{print $1}') == "Alpine" ]
 	then
 		echo 'vmess://'$(echo '{"add":"cdn.anycast.eu.org","aid":"0","host":"'$argo'","id":"'$uuid'","net":"ws","path":"'$urlpath'","port":"443","ps":"'$(echo $isp | sed -e 's/_/ /g')'_tls","tls":"tls","type":"none","v":"2"}' | base64 | awk '{ORS=(NR%76==0?RS:"");}1') >> v2ray.txt
 	else
 		echo 'vmess://'$(echo '{"add":"cdn.anycast.eu.org","aid":"0","host":"'$argo'","id":"'$uuid'","net":"ws","path":"'$urlpath'","port":"443","ps":"'$(echo $isp | sed -e 's/_/ /g')'_tls","tls":"tls","type":"none","v":"2"}' | base64 -w 0) >> v2ray.txt
 	fi
-	echo -e '\n'¶Ë¿Ú 443 ¿É¸ÄÎª 2053 2083 2087 2096 8443'\n' >> v2ray.txt
+	echo -e '\n'ç«¯å£ 443 å¯æ”¹ä¸º 2053 2083 2087 2096 8443'\n' >> v2ray.txt
 	if [ $(grep -i PRETTY_NAME /etc/os-release | cut -d \" -f2 | awk '{print $1}') == "Alpine" ]
 	then
 		echo 'vmess://'$(echo '{"add":"cdn.anycast.eu.org","aid":"0","host":"'$argo'","id":"'$uuid'","net":"ws","path":"'$urlpath'","port":"80","ps":"'$(echo $isp | sed -e 's/_/ /g')'","tls":"","type":"none","v":"2"}' | base64 | awk '{ORS=(NR%76==0?RS:"");}1') >> v2ray.txt
 	else
 		echo 'vmess://'$(echo '{"add":"cdn.anycast.eu.org","aid":"0","host":"'$argo'","id":"'$uuid'","net":"ws","path":"'$urlpath'","port":"80","ps":"'$(echo $isp | sed -e 's/_/ /g')'","tls":"","type":"none","v":"2"}' | base64 -w 0) >> v2ray.txt
 	fi
-	echo -e '\n'¶Ë¿Ú 80 ¿É¸ÄÎª 8080 8880 2052 2082 2086 2095 >> v2ray.txt
+	echo -e '\n'ç«¯å£ 80 å¯æ”¹ä¸º 8080 8880 2052 2082 2086 2095 >> v2ray.txt
 fi
 if [ $protocol == 2 ]
 then
-	echo -e vlessÁ´½ÓÒÑ¾­Éú³É, cdn.anycast.eu.org ¿ÉÌæ»»ÎªCFÓÅÑ¡IP'\n' > v2ray.txt
+	echo -e vlessé“¾æ¥å·²ç»ç”Ÿæˆ, cdn.anycast.eu.org å¯æ›¿æ¢ä¸ºCFä¼˜é€‰IP'\n' > v2ray.txt
 	echo 'vless://'$uuid'@cdn.anycast.eu.org:443?encryption=none&security=tls&type=ws&host='$argo'&path='$urlpath'#'$(echo $isp | sed -e 's/_/%20/g' -e 's/,/%2C/g')'_tls' >> v2ray.txt
-	echo -e '\n'¶Ë¿Ú 443 ¿É¸ÄÎª 2053 2083 2087 2096 8443'\n' >> v2ray.txt
+	echo -e '\n'ç«¯å£ 443 å¯æ”¹ä¸º 2053 2083 2087 2096 8443'\n' >> v2ray.txt
 	echo 'vless://'$uuid'@cdn.anycast.eu.org:80?encryption=none&security=none&type=ws&host='$argo'&path='$urlpath'#'$(echo $isp | sed -e 's/_/%20/g' -e 's/,/%2C/g')'' >> v2ray.txt
-	echo -e '\n'¶Ë¿Ú 80 ¿É¸ÄÎª 8080 8880 2052 2082 2086 2095 >> v2ray.txt
+	echo -e '\n'ç«¯å£ 80 å¯æ”¹ä¸º 8080 8880 2052 2082 2086 2095 >> v2ray.txt
 fi
 rm -rf argo.log
 cat v2ray.txt
-echo -e '\n'ĞÅÏ¢ÒÑ¾­±£´æÔÚ v2ray.txt,ÔÙ´Î²é¿´ÇëÔËĞĞ cat v2ray.txt
+echo -e '\n'ä¿¡æ¯å·²ç»ä¿å­˜åœ¨ v2ray.txt,å†æ¬¡æŸ¥çœ‹è¯·è¿è¡Œ cat v2ray.txt
 }
 
 function installtunnel(){
-#´´½¨Ö÷Ä¿Â¼
+#åˆ›å»ºä¸»ç›®å½•
 mkdir -p /opt/suoha/ >/dev/null 2>&1
 rm -rf xray cloudflared-linux xray.zip
 case "$(uname -m)" in
@@ -226,7 +226,7 @@ case "$(uname -m)" in
 	curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm -o cloudflared-linux
 	;;
 	* )
-	echo µ±Ç°¼Ü¹¹$(uname -m)Ã»ÓĞÊÊÅä
+	echo å½“å‰æ¶æ„$(uname -m)æ²¡æœ‰é€‚é…
 	exit
 	;;
 esac
@@ -308,72 +308,72 @@ cat>/opt/suoha/config.json<<EOF
 EOF
 fi
 clear
-echo ¸´ÖÆÏÂÃæµÄÁ´½Ó,ÓÃä¯ÀÀÆ÷´ò¿ª²¢ÊÚÈ¨ĞèÒª°ó¶¨µÄÓòÃû
-echo ÔÚÍøÒ³ÖĞÊÚÈ¨Íê±Ïºó»á¼ÌĞø½øĞĞÏÂÒ»²½ÉèÖÃ
+echo å¤åˆ¶ä¸‹é¢çš„é“¾æ¥,ç”¨æµè§ˆå™¨æ‰“å¼€å¹¶æˆæƒéœ€è¦ç»‘å®šçš„åŸŸå
+echo åœ¨ç½‘é¡µä¸­æˆæƒå®Œæ¯•åä¼šç»§ç»­è¿›è¡Œä¸‹ä¸€æ­¥è®¾ç½®
 /opt/suoha/cloudflared-linux --edge-ip-version $ips --protocol http2 tunnel login
 clear
 /opt/suoha/cloudflared-linux --edge-ip-version $ips --protocol http2 tunnel list >argo.log 2>&1
-echo -e ARGO TUNNELµ±Ç°ÒÑ¾­°ó¶¨µÄ·şÎñÈçÏÂ'\n'
+echo -e ARGO TUNNELå½“å‰å·²ç»ç»‘å®šçš„æœåŠ¡å¦‚ä¸‹'\n'
 sed 1,2d argo.log | awk '{print $2}'
-echo -e '\n'×Ô¶¨ÒåÒ»¸öÍêÕû¶ş¼¶ÓòÃû,ÀıÈç xxx.example.com
-echo ±ØĞëÊÇÍøÒ³ÀïÃæ°ó¶¨ÊÚÈ¨µÄÓòÃû²ÅÉúĞ§,²»ÄÜÂÒÊäÈë
-read -p "ÊäÈë°ó¶¨ÓòÃûµÄÍêÕû¶ş¼¶ÓòÃû: " domain
+echo -e '\n'è‡ªå®šä¹‰ä¸€ä¸ªå®Œæ•´äºŒçº§åŸŸå,ä¾‹å¦‚ xxx.example.com
+echo å¿…é¡»æ˜¯ç½‘é¡µé‡Œé¢ç»‘å®šæˆæƒçš„åŸŸåæ‰ç”Ÿæ•ˆ,ä¸èƒ½ä¹±è¾“å…¥
+read -p "è¾“å…¥ç»‘å®šåŸŸåçš„å®Œæ•´äºŒçº§åŸŸå: " domain
 if [ -z "$domain" ]
 then
-	echo Ã»ÓĞÉèÖÃÓòÃû
+	echo æ²¡æœ‰è®¾ç½®åŸŸå
 	exit
 elif [ $(echo $domain | grep "\." | wc -l) == 0 ]
 then
-	echo ÓòÃû¸ñÊ½²»ÕıÈ·
+	echo åŸŸåæ ¼å¼ä¸æ­£ç¡®
 	exit
 fi
 name=$(echo $domain | awk -F\. '{print $1}')
 if [ $(sed 1,2d argo.log | awk '{print $2}' | grep -w $name | wc -l) == 0 ]
 then
-	echo ´´½¨TUNNEL $name
+	echo åˆ›å»ºTUNNEL $name
 	/opt/suoha/cloudflared-linux --edge-ip-version $ips --protocol http2 tunnel create $name >argo.log 2>&1
-	echo TUNNEL $name ´´½¨³É¹¦
+	echo TUNNEL $name åˆ›å»ºæˆåŠŸ
 else
-	echo TUNNEL $name ÒÑ¾­´æÔÚ
+	echo TUNNEL $name å·²ç»å­˜åœ¨
 	if [ ! -f "/root/.cloudflared/$(sed 1,2d argo.log | awk '{print $1" "$2}' | grep -w $name | awk '{print $1}').json" ]
 	then
-		echo /root/.cloudflared/$(sed 1,2d argo.log | awk '{print $1" "$2}' | grep -w $name | awk '{print $1}').json ÎÄ¼ş²»´æÔÚ
-		echo ÇåÀíTUNNEL $name
+		echo /root/.cloudflared/$(sed 1,2d argo.log | awk '{print $1" "$2}' | grep -w $name | awk '{print $1}').json æ–‡ä»¶ä¸å­˜åœ¨
+		echo æ¸…ç†TUNNEL $name
 		/opt/suoha/cloudflared-linux --edge-ip-version $ips --protocol http2 tunnel cleanup $name >argo.log 2>&1
-		echo É¾³ıTUNNEL $name
+		echo åˆ é™¤TUNNEL $name
 		/opt/suoha/cloudflared-linux --edge-ip-version $ips --protocol http2 tunnel delete $name >argo.log 2>&1
-		echo ÖØ½¨TUNNEL $name
+		echo é‡å»ºTUNNEL $name
 		/opt/suoha/cloudflared-linux --edge-ip-version $ips --protocol http2 tunnel create $name >argo.log 2>&1
 	else
-		echo ÇåÀíTUNNEL $name
+		echo æ¸…ç†TUNNEL $name
 		/opt/suoha/cloudflared-linux --edge-ip-version $ips --protocol http2 tunnel cleanup $name >argo.log 2>&1
 	fi
 fi
-echo °ó¶¨ TUNNEL $name µ½ÓòÃû $domain
+echo ç»‘å®š TUNNEL $name åˆ°åŸŸå $domain
 /opt/suoha/cloudflared-linux --edge-ip-version $ips --protocol http2 tunnel route dns --overwrite-dns $name $domain >argo.log 2>&1
-echo $domain °ó¶¨³É¹¦
+echo $domain ç»‘å®šæˆåŠŸ
 tunneluuid=$(cut -d= -f2 argo.log)
 if [ $protocol == 1 ]
 then
-	echo -e vmessÁ´½ÓÒÑ¾­Éú³É, cdn.anycast.eu.org ¿ÉÌæ»»ÎªCFÓÅÑ¡IP'\n' >/opt/suoha/v2ray.txt
+	echo -e vmessé“¾æ¥å·²ç»ç”Ÿæˆ, cdn.anycast.eu.org å¯æ›¿æ¢ä¸ºCFä¼˜é€‰IP'\n' >/opt/suoha/v2ray.txt
 	echo 'vmess://'$(echo '{"add":"cdn.anycast.eu.org","aid":"0","host":"'$domain'","id":"'$uuid'","net":"ws","path":"'$urlpath'","port":"443","ps":"'$(echo $isp | sed -e 's/_/ /g')'","tls":"tls","type":"none","v":"2"}' | base64 -w 0) >>/opt/suoha/v2ray.txt
-	echo -e '\n'¶Ë¿Ú 443 ¿É¸ÄÎª 2053 2083 2087 2096 8443'\n' >>/opt/suoha/v2ray.txt
+	echo -e '\n'ç«¯å£ 443 å¯æ”¹ä¸º 2053 2083 2087 2096 8443'\n' >>/opt/suoha/v2ray.txt
 	echo 'vmess://'$(echo '{"add":"cdn.anycast.eu.org","aid":"0","host":"'$domain'","id":"'$uuid'","net":"ws","path":"'$urlpath'","port":"80","ps":"'$(echo $isp | sed -e 's/_/ /g')'","tls":"","type":"none","v":"2"}' | base64 -w 0) >>/opt/suoha/v2ray.txt
-	echo -e '\n'¶Ë¿Ú 80 ¿É¸ÄÎª 8080 8880 2052 2082 2086 2095'\n' >>/opt/suoha/v2ray.txt
-	echo ×¢Òâ:Èç¹û 80 8080 8880 2052 2082 2086 2095 ¶Ë¿ÚÎŞ·¨Õı³£Ê¹ÓÃ >>/opt/suoha/v2ray.txt
-	echo ÇëÇ°Íù https://dash.cloudflare.com/ >>/opt/suoha/v2ray.txt
-	echo ¼ì²é¹ÜÀíÃæ°å SSL/TLS - ±ßÔµÖ¤Êé - Ê¼ÖÕÊ¹ÓÃHTTPS ÊÇ·ñ´¦ÓÚ¹Ø±Õ×´Ì¬ >>/opt/suoha/v2ray.txt
+	echo -e '\n'ç«¯å£ 80 å¯æ”¹ä¸º 8080 8880 2052 2082 2086 2095'\n' >>/opt/suoha/v2ray.txt
+	echo æ³¨æ„:å¦‚æœ 80 8080 8880 2052 2082 2086 2095 ç«¯å£æ— æ³•æ­£å¸¸ä½¿ç”¨ >>/opt/suoha/v2ray.txt
+	echo è¯·å‰å¾€ https://dash.cloudflare.com/ >>/opt/suoha/v2ray.txt
+	echo æ£€æŸ¥ç®¡ç†é¢æ¿ SSL/TLS - è¾¹ç¼˜è¯ä¹¦ - å§‹ç»ˆä½¿ç”¨HTTPS æ˜¯å¦å¤„äºå…³é—­çŠ¶æ€ >>/opt/suoha/v2ray.txt
 fi
 if [ $protocol == 2 ]
 then
-	echo -e vlessÁ´½ÓÒÑ¾­Éú³É, cdn.anycast.eu.org ¿ÉÌæ»»ÎªCFÓÅÑ¡IP'\n' >/opt/suoha/v2ray.txt
+	echo -e vlessé“¾æ¥å·²ç»ç”Ÿæˆ, cdn.anycast.eu.org å¯æ›¿æ¢ä¸ºCFä¼˜é€‰IP'\n' >/opt/suoha/v2ray.txt
 	echo 'vless://'$uuid'@cdn.anycast.eu.org:443?encryption=none&security=tls&type=ws&host='$domain'&path='$urlpath'#'$(echo $isp | sed -e 's/_/%20/g' -e 's/,/%2C/g')'_tls' >>/opt/suoha/v2ray.txt
-	echo -e '\n'¶Ë¿Ú 443 ¿É¸ÄÎª 2053 2083 2087 2096 8443'\n' >>/opt/suoha/v2ray.txt
+	echo -e '\n'ç«¯å£ 443 å¯æ”¹ä¸º 2053 2083 2087 2096 8443'\n' >>/opt/suoha/v2ray.txt
 	echo 'vless://'$uuid'@cdn.anycast.eu.org:80?encryption=none&security=none&type=ws&host='$domain'&path='$urlpath'#'$(echo $isp | sed -e 's/_/%20/g' -e 's/,/%2C/g')'' >>/opt/suoha/v2ray.txt
-	echo -e '\n'¶Ë¿Ú 80 ¿É¸ÄÎª 8080 8880 2052 2082 2086 2095'\n' >>/opt/suoha/v2ray.txt
-	echo ×¢Òâ:Èç¹û 80 8080 8880 2052 2082 2086 2095 ¶Ë¿ÚÎŞ·¨Õı³£Ê¹ÓÃ >>/opt/suoha/v2ray.txt
-	echo ÇëÇ°Íù https://dash.cloudflare.com/ >>/opt/suoha/v2ray.txt
-	echo ¼ì²é¹ÜÀíÃæ°å SSL/TLS - ±ßÔµÖ¤Êé - Ê¼ÖÕÊ¹ÓÃHTTPS ÊÇ·ñ´¦ÓÚ¹Ø±Õ×´Ì¬ >>/opt/suoha/v2ray.txt
+	echo -e '\n'ç«¯å£ 80 å¯æ”¹ä¸º 8080 8880 2052 2082 2086 2095'\n' >>/opt/suoha/v2ray.txt
+	echo æ³¨æ„:å¦‚æœ 80 8080 8880 2052 2082 2086 2095 ç«¯å£æ— æ³•æ­£å¸¸ä½¿ç”¨ >>/opt/suoha/v2ray.txt
+	echo è¯·å‰å¾€ https://dash.cloudflare.com/ >>/opt/suoha/v2ray.txt
+	echo æ£€æŸ¥ç®¡ç†é¢æ¿ SSL/TLS - è¾¹ç¼˜è¯ä¹¦ - å§‹ç»ˆä½¿ç”¨HTTPS æ˜¯å¦å¤„äºå…³é—­çŠ¶æ€ >>/opt/suoha/v2ray.txt
 fi
 rm -rf argo.log
 cat>/opt/suoha/config.yaml<<EOF
@@ -384,7 +384,7 @@ ingress:
   - hostname:
     service: http://localhost:$port
 EOF
-#´´½¨·şÎñ
+#åˆ›å»ºæœåŠ¡
 cat>/lib/systemd/system/cloudflared.service<<EOF
 [Unit]
 Description=Cloudflare Tunnel
@@ -420,7 +420,7 @@ systemctl enable xray.service >/dev/null 2>&1
 systemctl --system daemon-reload
 systemctl start cloudflared.service
 systemctl start xray.service
-#´´½¨ÃüÁîÁ´½Ó
+#åˆ›å»ºå‘½ä»¤é“¾æ¥
 cat>/opt/suoha/suoha.sh<<EOF
 #!/bin/bash
 clear
@@ -428,14 +428,14 @@ while true
 do
 echo argo \$(systemctl status cloudflared.service | sed -n '3p')
 echo xray \$(systemctl status xray.service | sed -n '3p')
-echo 1.¹ÜÀíTUNNEL
-echo 2.Æô¶¯·şÎñ
-echo 3.Í£Ö¹·şÎñ
-echo 4.ÖØÆô·şÎñ
-echo 5.Ğ¶ÔØ·şÎñ
-echo 6.²é¿´µ±Ç°v2rayÁ´½Ó
-echo 0.ÍË³ö
-read -p "ÇëÑ¡Ôñ²Ëµ¥(Ä¬ÈÏ0): " menu
+echo 1.ç®¡ç†TUNNEL
+echo 2.å¯åŠ¨æœåŠ¡
+echo 3.åœæ­¢æœåŠ¡
+echo 4.é‡å¯æœåŠ¡
+echo 5.å¸è½½æœåŠ¡
+echo 6.æŸ¥çœ‹å½“å‰v2rayé“¾æ¥
+echo 0.é€€å‡º
+read -p "è¯·é€‰æ‹©èœå•(é»˜è®¤0): " menu
 if [ -z "\$menu" ]
 then
 	menu=0
@@ -445,21 +445,21 @@ then
 	clear
 	while true
 	do
-		echo ARGO TUNNELµ±Ç°ÒÑ¾­°ó¶¨µÄ·şÎñÈçÏÂ
+		echo ARGO TUNNELå½“å‰å·²ç»ç»‘å®šçš„æœåŠ¡å¦‚ä¸‹
 		/opt/suoha/cloudflared-linux tunnel list
-		echo 1.É¾³ıTUNNEL
-		echo 0.ÍË³ö
-		read -p "ÇëÑ¡Ôñ²Ëµ¥(Ä¬ÈÏ0): " tunneladmin
+		echo 1.åˆ é™¤TUNNEL
+		echo 0.é€€å‡º
+		read -p "è¯·é€‰æ‹©èœå•(é»˜è®¤0): " tunneladmin
 		if [ -z "\$tunneladmin" ]
 		then
 			tunneladmin=0
 		fi
 		if [ \$tunneladmin == 1 ]
 		then
-			read -p "ÇëÊäÈëÒªÉ¾³ıµÄTUNNEL NAME: " tunnelname
-			echo ¶Ï¿ªTUNNEL \$tunnelname
+			read -p "è¯·è¾“å…¥è¦åˆ é™¤çš„TUNNEL NAME: " tunnelname
+			echo æ–­å¼€TUNNEL \$tunnelname
 			/opt/suoha/cloudflared-linux tunnel cleanup \$tunnelname
-			echo É¾³ıTUNNEL \$tunnelname
+			echo åˆ é™¤TUNNEL \$tunnelname
 			/opt/suoha/cloudflared-linux tunnel delete \$tunnelname
 		else
 			break
@@ -490,10 +490,10 @@ then
 	kill -9 \$(ps -ef | grep cloudflared-linux | grep -v grep | awk '{print \$2}') >/dev/null 2>&1
 	rm -rf /opt/suoha /lib/systemd/system/cloudflared.service /lib/systemd/system/xray.service /usr/bin/suoha ~/.cloudflared
 	systemctl --system daemon-reload
-	echo ËùÓĞ·şÎñ¶¼Ğ¶ÔØÍê³É
-	echo ³¹µ×É¾³ıÊÚÈ¨¼ÇÂ¼
-	echo Çë·ÃÎÊ https://dash.cloudflare.com/profile/api-tokens
-	echo É¾³ıÊÚÈ¨µÄ Argo Tunnel API Token ¼´¿É
+	echo æ‰€æœ‰æœåŠ¡éƒ½å¸è½½å®Œæˆ
+	echo å½»åº•åˆ é™¤æˆæƒè®°å½•
+	echo è¯·è®¿é—® https://dash.cloudflare.com/profile/api-tokens
+	echo åˆ é™¤æˆæƒçš„ Argo Tunnel API Token å³å¯
 	exit
 elif [ \$menu == 6 ]
 then
@@ -501,7 +501,7 @@ then
 	cat /opt/suoha/v2ray.txt
 elif [ \$menu == 0 ]
 then
-	echo ÍË³ö³É¹¦
+	echo é€€å‡ºæˆåŠŸ
 	exit
 fi
 done
@@ -511,44 +511,44 @@ ln -sf /opt/suoha/suoha.sh /usr/bin/suoha
 }
 
 clear
-echo Ëó¹şÄ£Ê½²»ĞèÒª×Ô¼ºÌá¹©ÓòÃû,Ê¹ÓÃCF ARGO QUICK TUNNEL´´½¨¿ìËÙÁ´½Ó
-echo Ëó¹şÄ£Ê½ÔÚÖØÆô»òÕß½Å±¾ÔÙ´ÎÔËĞĞºóÊ§Ğ§,Èç¹ûĞèÒªÊ¹ÓÃĞèÒªÔÙ´ÎÔËĞĞ´´½¨
-echo °²×°·şÎñÄ£Ê½,ĞèÒªÓĞCFÍĞ¹ÜÓòÃû,²¢ÇÒĞèÒª°´ÕÕÌáÊ¾ÊÖ¶¯°ó¶¨ARGO·şÎñ
-echo Ê×´Î°ó¶¨ARGO·şÎñºóÈç¹û²»ÏëÔÙ´ÎÌø×ªÍøÒ³°ó¶¨
-echo ½«ÒÑ¾­°ó¶¨µÄÏµÍ³Ä¿Â¼ÏÂµÄ /root/.cloudflared ÎÄ¼ş¼ĞÒÔ¼°ÄÚÈİ
-echo ¿½±´ÖÁĞÂÏµÍ³ÏÂÍ¬ÑùµÄÄ¿Â¼,»á×Ô¶¯Ìø¹ıµÇÂ¼ÑéÖ¤
+echo æ¢­å“ˆæ¨¡å¼ä¸éœ€è¦è‡ªå·±æä¾›åŸŸå,ä½¿ç”¨CF ARGO QUICK TUNNELåˆ›å»ºå¿«é€Ÿé“¾æ¥
+echo æ¢­å“ˆæ¨¡å¼åœ¨é‡å¯æˆ–è€…è„šæœ¬å†æ¬¡è¿è¡Œåå¤±æ•ˆ,å¦‚æœéœ€è¦ä½¿ç”¨éœ€è¦å†æ¬¡è¿è¡Œåˆ›å»º
+echo å®‰è£…æœåŠ¡æ¨¡å¼,éœ€è¦æœ‰CFæ‰˜ç®¡åŸŸå,å¹¶ä¸”éœ€è¦æŒ‰ç…§æç¤ºæ‰‹åŠ¨ç»‘å®šARGOæœåŠ¡
+echo é¦–æ¬¡ç»‘å®šARGOæœåŠ¡åå¦‚æœä¸æƒ³å†æ¬¡è·³è½¬ç½‘é¡µç»‘å®š
+echo å°†å·²ç»ç»‘å®šçš„ç³»ç»Ÿç›®å½•ä¸‹çš„ /root/.cloudflared æ–‡ä»¶å¤¹ä»¥åŠå†…å®¹
+echo æ‹·è´è‡³æ–°ç³»ç»Ÿä¸‹åŒæ ·çš„ç›®å½•,ä¼šè‡ªåŠ¨è·³è¿‡ç™»å½•éªŒè¯
 
-echo -e '\n'Ëó¹şÊÇÒ»ÖÖÖÇ»Û!!!Ëó¹ş!Ëó¹ş!Ëó¹ş!Ëó¹ş!Ëó¹ş!Ëó¹ş!Ëó¹ş...'\n'
-echo 1.Ëó¹şÄ£Ê½
-echo 2.°²×°·şÎñ
-echo 3.Ğ¶ÔØ·şÎñ
-echo 4.Çå¿Õ»º´æ
-echo -e 0.ÍË³ö½Å±¾'\n'
-read -p "ÇëÑ¡ÔñÄ£Ê½(Ä¬ÈÏ1):" mode
+echo -e '\n'æ¢­å“ˆæ˜¯ä¸€ç§æ™ºæ…§!!!æ¢­å“ˆ!æ¢­å“ˆ!æ¢­å“ˆ!æ¢­å“ˆ!æ¢­å“ˆ!æ¢­å“ˆ!æ¢­å“ˆ...'\n'
+echo 1.æ¢­å“ˆæ¨¡å¼
+echo 2.å®‰è£…æœåŠ¡
+echo 3.å¸è½½æœåŠ¡
+echo 4.æ¸…ç©ºç¼“å­˜
+echo -e 0.é€€å‡ºè„šæœ¬'\n'
+read -p "è¯·é€‰æ‹©æ¨¡å¼(é»˜è®¤1):" mode
 if [ -z "$mode" ]
 then
 	mode=1
 fi
 if [ $mode == 1 ]
 then
-	read -p "ÇëÑ¡ÔñxrayĞ­Òé(Ä¬ÈÏ1.vmess,2.vless):" protocol
+	read -p "è¯·é€‰æ‹©xrayåè®®(é»˜è®¤1.vmess,2.vless):" protocol
 	if [ -z "$protocol" ]
 	then
 		protocol=1
 	fi
 	if [ $protocol != 1 ] && [ $protocol != 2 ]
 	then
-		echo ÇëÊäÈëÕıÈ·µÄxrayĞ­Òé
+		echo è¯·è¾“å…¥æ­£ç¡®çš„xrayåè®®
 		exit
 	fi
-	read -p "ÇëÑ¡ÔñargoÁ¬½ÓÄ£Ê½IPV4»òÕßIPV6(ÊäÈë4»ò6,Ä¬ÈÏ4):" ips
+	read -p "è¯·é€‰æ‹©argoè¿æ¥æ¨¡å¼IPV4æˆ–è€…IPV6(è¾“å…¥4æˆ–6,é»˜è®¤4):" ips
 	if [ -z "$ips" ]
 	then
 		ips=4
 	fi
 	if [ $ips != 4 ] && [ $ips != 6 ]
 	then
-		echo ÇëÊäÈëÕıÈ·µÄargoÁ¬½ÓÄ£Ê½
+		echo è¯·è¾“å…¥æ­£ç¡®çš„argoè¿æ¥æ¨¡å¼
 		exit
 	fi
 	isp=$(curl -$ips -s https://speed.cloudflare.com/meta | awk -F\" '{print $26"-"$18"-"$30}' | sed -e 's/ /_/g')
@@ -566,27 +566,27 @@ elif [ $mode == 2 ]
 then
 	if [ $(grep -i PRETTY_NAME /etc/os-release | cut -d \" -f2 | awk '{print $1}') == "Alpine" ]
 	then
-		echo µ±Ç°ÏµÍ³ $(grep -i PRETTY_NAME /etc/os-release | cut -d \" -f2) Ã»ÓĞÊÊÅä°²×°·şÎñ
+		echo å½“å‰ç³»ç»Ÿ $(grep -i PRETTY_NAME /etc/os-release | cut -d \" -f2) æ²¡æœ‰é€‚é…å®‰è£…æœåŠ¡
 		exit
 	fi
-	read -p "ÇëÑ¡ÔñxrayĞ­Òé(Ä¬ÈÏ1.vmess,2.vless):" protocol
+	read -p "è¯·é€‰æ‹©xrayåè®®(é»˜è®¤1.vmess,2.vless):" protocol
 	if [ -z "$protocol" ]
 	then
 		protocol=1
 	fi
 	if [ $protocol != 1 ] && [ $protocol != 2 ]
 	then
-		echo ÇëÊäÈëÕıÈ·µÄxrayĞ­Òé
+		echo è¯·è¾“å…¥æ­£ç¡®çš„xrayåè®®
 		exit
 	fi
-	read -p "ÇëÑ¡ÔñargoÁ¬½ÓÄ£Ê½IPV4»òÕßIPV6(ÊäÈë4»ò6,Ä¬ÈÏ4):" ips
+	read -p "è¯·é€‰æ‹©argoè¿æ¥æ¨¡å¼IPV4æˆ–è€…IPV6(è¾“å…¥4æˆ–6,é»˜è®¤4):" ips
 	if [ -z "$ips" ]
 	then
 		ips=4
 	fi
 	if [ $ips != 4 ] && [ $ips != 6 ]
 	then
-		echo ÇëÊäÈëÕıÈ·µÄargoÁ¬½ÓÄ£Ê½
+		echo è¯·è¾“å…¥æ­£ç¡®çš„argoè¿æ¥æ¨¡å¼
 		exit
 	fi
 	isp=$(curl -$ips -s https://speed.cloudflare.com/meta | awk -F\" '{print $26"-"$18"-"$30}' | sed -e 's/ /_/g')
@@ -598,7 +598,7 @@ then
 	systemctl --system daemon-reload
 	installtunnel
 	cat /opt/suoha/v2ray.txt
-	echo ·şÎñ°²×°Íê³É,¹ÜÀí·şÎñÇëÔËĞĞÃüÁî suoha
+	echo æœåŠ¡å®‰è£…å®Œæˆ,ç®¡ç†æœåŠ¡è¯·è¿è¡Œå‘½ä»¤ suoha
 elif [ $mode == 3 ]
 then
 	systemctl stop cloudflared.service
@@ -610,10 +610,10 @@ then
 	rm -rf /opt/suoha /lib/systemd/system/cloudflared.service /lib/systemd/system/xray.service /usr/bin/suoha ~/.cloudflared
 	systemctl --system daemon-reload
 	clear
-	echo ËùÓĞ·şÎñ¶¼Ğ¶ÔØÍê³É
-	echo ³¹µ×É¾³ıÊÚÈ¨¼ÇÂ¼
-	echo Çë·ÃÎÊ https://dash.cloudflare.com/profile/api-tokens
-	echo É¾³ıÊÚÈ¨µÄ Argo Tunnel API Token ¼´¿É
+	echo æ‰€æœ‰æœåŠ¡éƒ½å¸è½½å®Œæˆ
+	echo å½»åº•åˆ é™¤æˆæƒè®°å½•
+	echo è¯·è®¿é—® https://dash.cloudflare.com/profile/api-tokens
+	echo åˆ é™¤æˆæƒçš„ Argo Tunnel API Token å³å¯
 elif [ $mode == 4 ]
 then
 	if [ $(grep -i PRETTY_NAME /etc/os-release | cut -d \" -f2 | awk '{print $1}') == "Alpine" ]
@@ -626,6 +626,6 @@ then
 	fi
 	rm -rf xray cloudflared-linux v2ray.txt
 else
-	echo ÍË³ö³É¹¦
+	echo é€€å‡ºæˆåŠŸ
 	exit
 fi
